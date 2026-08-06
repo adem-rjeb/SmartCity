@@ -1,0 +1,38 @@
+<div class="agent-dashboard">
+  <mat-tab-group>
+    <mat-tab label="My Tasks">
+      <app-assigned-tasks-list></app-assigned-tasks-list>
+    </mat-tab>
+    <mat-tab label="Completed Work">
+      <mat-card class="completed-card">
+        <mat-card-content>
+          <div *ngIf="(completedAssignments$ | async) as completed; else loadingCompleted">
+            <div *ngIf="completed.length === 0" class="no-tasks">
+              <p>No completed assignments yet.</p>
+            </div>
+            <mat-list *ngIf="completed.length > 0">
+              <mat-list-item *ngFor="let assignment of completed">
+                <div matListItemTitle>
+                  {{ assignment.report?.titre ?? 'Untitled Report' }}
+                </div>
+                <div matListItemLine>
+                  {{ assignment.report?.adresse }}
+                </div>
+                <div matListItemLine class="meta">
+                  Completed: {{ assignment.completedAt | date: 'medium' }}
+                  <span *ngIf="assignment.commentaire"> — {{ assignment.commentaire }}</span>
+                </div>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <ng-template #loadingCompleted>
+            <div class="loading-container">
+              <mat-spinner></mat-spinner>
+            </div>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+

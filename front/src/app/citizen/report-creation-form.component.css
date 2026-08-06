@@ -1,0 +1,61 @@
+.form-card {
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.geo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+}
+
+.geo-grid mat-form-field {
+  width: 100%;
+}
+
+.map-section {
+  margin-bottom: 1rem;
+}
+
+.map-hint {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.map-container {
+  height: 280px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  z-index: 0;
+}
+
+.photo-upload {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.photo-upload input[type='file'] {
+  margin-top: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}

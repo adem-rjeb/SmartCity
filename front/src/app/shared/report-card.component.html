@@ -1,0 +1,13 @@
+<mat-card class="report-card">
+  <mat-card-header>
+    <mat-card-title>{{ report.titre }}</mat-card-title>
+    <mat-card-subtitle>{{ report.adresse }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ report.description }}</p>
+    <div class="meta">
+      <app-status-badge [status]="report.status"></app-status-badge>
+      <app-priority-badge [priority]="report.priority"></app-priority-badge>
+    </div>
+  </mat-card-content>
+</mat-card>

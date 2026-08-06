@@ -1,0 +1,28 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <a routerLink="/" class="brand">{{ title }}</a>
+  <span class="spacer"></span>
+
+  @if (auth.isAuthenticated()) {
+    @switch (userRole) {
+      @case ('CITIZEN') {
+        <a mat-button routerLink="/citizen">Citizen</a>
+      }
+      @case ('AGENT') {
+        <a mat-button routerLink="/agent">Agent</a>
+      }
+      @case ('ADMIN') {
+        <a mat-button routerLink="/admin">Admin</a>
+      }
+      @case ('SUPER_ADMIN') {
+        <a mat-button routerLink="/supervisor">Supervisor</a>
+      }
+    }
+    <button mat-button type="button" (click)="logout()">Logout</button>
+  } @else {
+    <a mat-button routerLink="/login">Login</a>
+  }
+</mat-toolbar>
+
+<main class="app-shell">
+  <router-outlet />
+</main>

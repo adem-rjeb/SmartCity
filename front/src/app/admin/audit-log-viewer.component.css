@@ -1,0 +1,23 @@
+.audit-card {
+  margin: 2rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+table {
+  width: 100%;
+}
+
+.details {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.empty-state {
+  padding: 1.5rem 0;
+  color: #666;
+}

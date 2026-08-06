@@ -1,0 +1,31 @@
+<mat-card class="queue-card">
+  <mat-card-header>
+    <mat-card-title>Pending Reports Validation Queue</mat-card-title>
+    <mat-card-subtitle>Review and validate citizen reports</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && (reports$ | async) as reports" class="reports-queue">
+      <div *ngIf="reports.length === 0" class="no-reports">
+        <p>No pending reports at the moment.</p>
+      </div>
+
+      <div *ngIf="reports.length > 0" class="reports-list">
+        <div *ngFor="let report of reports" class="report-item">
+          <app-report-card [report]="report"></app-report-card>
+          <div class="actions">
+            <button mat-stroked-button (click)="assignReport(report)">
+              ✓ Validate & Assign
+            </button>
+            <button mat-stroked-button color="warn" (click)="rejectReport(report)">
+              ✗ Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

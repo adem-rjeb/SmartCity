@@ -1,0 +1,52 @@
+<mat-card class="audit-card">
+  <mat-card-header>
+    <mat-card-title>Audit Log Viewer</mat-card-title>
+    <mat-card-subtitle>Track all system changes</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && (logs$ | async) as logs">
+      <p *ngIf="logs.length === 0" class="empty-state">No audit events yet.</p>
+
+      <table mat-table [dataSource]="logs" *ngIf="logs.length > 0">
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let log">{{ log.action }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="entityName">
+          <th mat-header-cell *matHeaderCellDef>Entity Type</th>
+          <td mat-cell *matCellDef="let log">{{ log.entityName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="entityId">
+          <th mat-header-cell *matHeaderCellDef>Entity ID</th>
+          <td mat-cell *matCellDef="let log">{{ log.entityId }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+          <td mat-cell *matCellDef="let log">{{ log.createdAt | date: 'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef>User</th>
+          <td mat-cell *matCellDef="let log">{{ log.user?.nom || refId(log.user) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="details">
+          <th mat-header-cell *matHeaderCellDef>Details</th>
+          <td mat-cell *matCellDef="let log">
+            <span class="details" [title]="log.details || ''">{{ log.details || '—' }}</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

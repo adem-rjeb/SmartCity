@@ -1,0 +1,28 @@
+.badge {
+  display: inline-flex;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.low {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.medium {
+  background: #fff8e1;
+  color: #f9a825;
+}
+
+.high {
+  background: #ffe0b2;
+  color: #ef6c00;
+}
+
+.urgent {
+  background: #fce4ec;
+  color: #c2185b;
+}

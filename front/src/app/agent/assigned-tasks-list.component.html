@@ -1,0 +1,42 @@
+<mat-card class="tasks-card">
+  <mat-card-header>
+    <mat-card-title>Assigned Tasks</mat-card-title>
+    <mat-card-subtitle>Your pending assignments</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && (assignments$ | async) as assignments">
+      <div *ngIf="assignments.length === 0" class="no-tasks">
+        <p>No tasks assigned yet.</p>
+      </div>
+
+      <mat-list *ngIf="assignments.length > 0">
+        <mat-list-item
+          *ngFor="let assignment of assignments"
+          [matBadge]="assignment.status"
+          matBadgeColor="accent"
+        >
+          <div matListItemTitle>
+            {{ assignment.report?.titre }}
+          </div>
+          <div matListItemLine>
+            {{ assignment.report?.adresse }}
+          </div>
+          <div matListItemLine class="meta">
+            Priority: {{ assignment.report?.priority }} | Status: {{ assignment.status }}
+          </div>
+          <button
+            mat-stroked-button
+            matListItemMeta
+            [routerLink]="['/agent/task', assignment.id]"
+          >
+            View Details
+          </button>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-card-content>
+</mat-card>

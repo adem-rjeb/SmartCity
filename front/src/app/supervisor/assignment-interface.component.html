@@ -1,0 +1,102 @@
+<mat-card class="assignment-card">
+  <mat-card-header>
+    <mat-card-title>
+      {{ selectedReport ? 'Assign Report to Agent' : 'Assignments' }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{ selectedReport ? 'Select an agent and provide assignment details' : 'Current report assignments' }}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- List mode (Assignments tab, no report selected) -->
+    <div *ngIf="!isLoading && !selectedReport">
+      <p *ngIf="assignments.length === 0" class="info-box">
+        No assignments yet. Open <strong>Pending Reports</strong> and choose
+        <strong>Validate &amp; Assign</strong> to create one.
+      </p>
+
+      <table
+        mat-table
+        [dataSource]="assignments"
+        *ngIf="assignments.length > 0"
+        class="assignments-table"
+      >
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let a">{{ a.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="report">
+          <th mat-header-cell *matHeaderCellDef>Report</th>
+          <td mat-cell *matCellDef="let a">
+            {{ a.report?.titre || ('#' + refId(a.report)) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="agent">
+          <th mat-header-cell *matHeaderCellDef>Agent</th>
+          <td mat-cell *matCellDef="let a">
+            {{ a.assignedAgent?.nom || ('#' + refId(a.assignedAgent)) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let a">{{ a.status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="assignedAt">
+          <th mat-header-cell *matHeaderCellDef>Assigned</th>
+          <td mat-cell *matCellDef="let a">{{ a.assignedAt | date: 'medium' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+
+    <!-- Form mode (navigated with reportId) -->
+    <form *ngIf="!isLoading && selectedReport" [formGroup]="form" (ngSubmit)="createAssignment()">
+      <mat-form-field appearance="outline" class="full-width" disabled>
+        <mat-label>Report</mat-label>
+        <input matInput [value]="selectedReport?.titre" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Assign to Agent</mat-label>
+        <mat-select formControlName="agentId">
+          <mat-option *ngFor="let agent of (agents$ | async)" [value]="agent.id">
+            {{ agent.nom }} ({{ agent.email }})
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Assignment Notes (optional)</mat-label>
+        <textarea matInput formControlName="commentaire" rows="4"></textarea>
+      </mat-form-field>
+
+      <div class="info-box">
+        <p><strong>Current Priority:</strong> {{ selectedReport?.priority }}</p>
+        <p><strong>Category:</strong> {{ selectedReport?.category?.nom || refId(selectedReport?.category) }}</p>
+      </div>
+
+      <div class="button-group">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid || isSubmitting"
+        >
+          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+          {{ isSubmitting ? 'Assigning...' : 'Create Assignment' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

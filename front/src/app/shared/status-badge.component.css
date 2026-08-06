@@ -1,0 +1,35 @@
+.badge {
+  display: inline-flex;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.pending {
+  background: #fff4e5;
+  color: #8a4b00;
+}
+
+.under-review {
+  background: #e8f0fe;
+  color: #1a73e8;
+}
+
+.assigned,
+.in-progress {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.resolved,
+.closed {
+  background: #e6f4ea;
+  color: #0f766e;
+}
+
+.rejected {
+  background: #fce8e6;
+  color: #c5221f;
+}

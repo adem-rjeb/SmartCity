@@ -1,0 +1,17 @@
+.categories-card {
+  margin: 2rem;
+}
+
+.add-btn {
+  margin-bottom: 1rem;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+table {
+  width: 100%;
+}

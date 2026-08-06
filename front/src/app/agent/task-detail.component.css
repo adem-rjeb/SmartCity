@@ -1,0 +1,78 @@
+.detail-card {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  padding: 0.75rem;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.info-item label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.description {
+  margin-bottom: 1rem;
+}
+
+.description label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.description p {
+  background: #f9f9f9;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+.update-form {
+  border-top: 1px solid #ddd;
+  padding-top: 1rem;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.proof-upload {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.proof-upload input[type='file'] {
+  margin-top: 0.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+mat-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+}

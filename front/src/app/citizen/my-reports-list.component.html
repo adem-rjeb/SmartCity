@@ -1,0 +1,19 @@
+<mat-card class="reports-card">
+  <mat-card-header>
+    <mat-card-title>My Reports</mat-card-title>
+    <mat-card-subtitle>Track the status of your submitted issues</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading && (reports$ | async) as reports" class="reports-list">
+      <div *ngIf="reports.length === 0" class="no-reports">
+        <p>No reports yet. <a routerLink="/citizen/create">Create your first report!</a></p>
+      </div>
+
+      <app-report-card *ngFor="let report of reports" [report]="report"></app-report-card>
+    </div>
+  </mat-card-content>
+</mat-card>

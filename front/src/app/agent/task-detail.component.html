@@ -1,0 +1,68 @@
+<mat-card class="detail-card" *ngIf="assignment; else loading">
+  <mat-card-header>
+    <mat-card-title>{{ assignment.report?.titre }}</mat-card-title>
+    <mat-card-subtitle>{{ assignment.report?.adresse }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Status:</label>
+        <strong>{{ assignment.status }}</strong>
+      </div>
+      <div class="info-item">
+        <label>Priority:</label>
+        <strong>{{ assignment.report?.priority }}</strong>
+      </div>
+      <div class="info-item">
+        <label>Assigned At:</label>
+        <strong>{{ assignment.assignedAt | date: 'short' }}</strong>
+      </div>
+    </div>
+
+    <div class="description">
+      <label>Description:</label>
+      <p>{{ assignment.report?.description }}</p>
+    </div>
+
+    <!-- Status Update Form -->
+    <form [formGroup]="form" (ngSubmit)="updateStatus()" class="update-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Update Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="ACCEPTED">Accept Task</mat-option>
+          <mat-option value="IN_PROGRESS">Start Work</mat-option>
+          <mat-option value="COMPLETED">Mark Complete</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Comments (optional)</mat-label>
+        <textarea matInput formControlName="commentaire" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="proof-upload">
+        <label>Proof Photo (for COMPLETED):</label>
+        <input type="file" accept="image/*" (change)="onProofPhotoSelected($event)" />
+        <p *ngIf="selectedProofFileName">Selected: {{ selectedProofFileName }}</p>
+      </div>
+
+      <div class="button-group">
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isSubmitting">
+          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+          {{ isSubmitting ? 'Updating...' : 'Update Status' }}
+        </button>
+        <button mat-stroked-button type="button" (click)="goBack()">Back</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<ng-template #loading>
+  <mat-card class="detail-card">
+    <mat-card-content>
+      <div class="loading-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-template>

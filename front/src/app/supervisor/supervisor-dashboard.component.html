@@ -1,0 +1,58 @@
+<div class="supervisor-dashboard">
+  <mat-tab-group>
+    <!-- Dashboard Tab -->
+    <mat-tab label="Dashboard">
+      <div class="dashboard-grid">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Reports Overview</mat-card-title>
+            <mat-card-subtitle>Real-time statistics</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">Pending</div>
+                <div class="stat-value">{{ statusCount('PENDING') }}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">In Progress</div>
+                <div class="stat-value">{{ statusCount('IN_PROGRESS') + statusCount('ASSIGNED') }}</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Avg Resolution</div>
+                <div class="stat-value">{{ avgResolutionDays }} days</div>
+              </div>
+            </div>
+
+            <div class="charts-container">
+              <ngx-charts-bar-vertical
+                [view]="[600, 260]"
+                [results]="stats?.reportsByStatus ?? []"
+                [xAxis]="true"
+                [yAxis]="true"
+                [legend]="false"
+                [showGridLines]="true"
+              ></ngx-charts-bar-vertical>
+
+              <ngx-charts-pie-chart
+                [view]="[600, 260]"
+                [results]="stats?.reportsByCategory ?? []"
+                [legend]="true"
+              ></ngx-charts-pie-chart>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Pending Reports Tab -->
+    <mat-tab label="Pending Reports">
+      <app-pending-reports-queue></app-pending-reports-queue>
+    </mat-tab>
+
+    <!-- Assignment Tab -->
+    <mat-tab label="Assignments">
+      <app-assignment-interface></app-assignment-interface>
+    </mat-tab>
+  </mat-tab-group>
+</div>
