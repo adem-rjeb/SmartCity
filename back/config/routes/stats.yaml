@@ -1,0 +1,9 @@
+api_stats_dashboard:
+  path: /api/stats/dashboard
+  controller: App\\Controller\\StatsController::dashboard
+  methods: GET
+
+api_stats_resolution:
+  path: /api/stats/resolution-time
+  controller: App\\Controller\\StatsController::resolution
+  methods: GET

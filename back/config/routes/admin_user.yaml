@@ -1,0 +1,4 @@
+api_admin_users:
+  path: /api/admin_users
+  controller: App\Controller\AdminUserController::create
+  methods: [POST]
