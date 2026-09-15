@@ -1,28 +1,92 @@
-<mat-toolbar color="primary" class="app-toolbar">
-  <a routerLink="/" class="brand">{{ title }}</a>
-  <span class="spacer"></span>
-
-  @if (auth.isAuthenticated()) {
-    @switch (userRole) {
-      @case ('CITIZEN') {
-        <a mat-button routerLink="/citizen">Citizen</a>
-      }
-      @case ('AGENT') {
-        <a mat-button routerLink="/agent">Agent</a>
-      }
-      @case ('ADMIN') {
-        <a mat-button routerLink="/admin">Admin</a>
-      }
-      @case ('SUPER_ADMIN') {
-        <a mat-button routerLink="/supervisor">Supervisor</a>
-      }
-    }
-    <button mat-button type="button" (click)="logout()">Logout</button>
-  } @else {
-    <a mat-button routerLink="/login">Login</a>
-  }
-</mat-toolbar>
-
-<main class="app-shell">
+<!-- ── Auth routes: full-screen, no sidebar ───────────────────── -->
+@if (isAuthRoute()) {
   <router-outlet />
-</main>
+} @else {
+  <!-- ── Sidebar layout ──────────────────────────────────────── -->
+  <div class="shell" [class.sidebar-open]="sidebarOpen()">
+
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" (click)="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Brand -->
+      <a routerLink="/" class="sidebar-brand" (click)="closeSidebar()">
+        <svg class="brand-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#4f8ef7"/>
+          <path d="M9 22V12h3v10H9zm5 0V12h3l3.5 5.8V12H23v10h-3l-3.5-5.8V22h-3z" fill="#fff"/>
+        </svg>
+        <span class="brand-name">
+          SmartCity<span class="brand-accent"> TN</span>
+        </span>
+      </a>
+
+      <!-- Nav links -->
+      <nav class="sidebar-nav" aria-label="Main navigation">
+        @switch (userRole) {
+          @case ('ROLE_CITIZEN') {
+            <a routerLink="/citizen" routerLinkActive="nav-item--active" class="nav-item" (click)="closeSidebar()">
+              <span class="material-icons nav-icon">home_work</span>
+              My Reports
+            </a>
+          }
+          @case ('ROLE_AGENT') {
+            <a routerLink="/agent" routerLinkActive="nav-item--active" class="nav-item" (click)="closeSidebar()">
+              <span class="material-icons nav-icon">task_alt</span>
+              Tasks
+            </a>
+          }
+          @case ('ROLE_ADMIN') {
+            <a routerLink="/admin" routerLinkActive="nav-item--active" class="nav-item" (click)="closeSidebar()">
+              <span class="material-icons nav-icon">manage_accounts</span>
+              Administration
+            </a>
+          }
+          @case ('ROLE_SUPER_ADMIN') {
+            <a routerLink="/supervisor" routerLinkActive="nav-item--active" class="nav-item" (click)="closeSidebar()">
+              <span class="material-icons nav-icon">analytics</span>
+              Supervisor
+            </a>
+          }
+        }
+      </nav>
+
+      <!-- Sidebar footer: user + logout -->
+      <div class="sidebar-footer">
+        <div class="user-row">
+          <div class="user-avatar">
+            <span class="material-icons" style="font-size:16px;">person</span>
+          </div>
+          <div class="user-info">
+            <span class="user-role">{{ userRole?.replace('ROLE_', '') | titlecase }}</span>
+          </div>
+        </div>
+        <button class="logout-btn" type="button" (click)="logout()" title="Sign out">
+          <span class="material-icons" style="font-size:18px;">logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main-wrap">
+      <!-- Mobile top bar -->
+      <header class="topbar">
+        <button class="hamburger" type="button" (click)="toggleSidebar()" aria-label="Toggle menu">
+          <span class="material-icons">menu</span>
+        </button>
+        <a routerLink="/" class="topbar-brand">
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#4f8ef7"/>
+            <path d="M9 22V12h3v10H9zm5 0V12h3l3.5 5.8V12H23v10h-3l-3.5-5.8V22h-3z" fill="#fff"/>
+          </svg>
+          <span>SmartCity TN</span>
+        </a>
+      </header>
+
+      <main class="content">
+        <router-outlet />
+      </main>
+    </div>
+
+  </div>
+}

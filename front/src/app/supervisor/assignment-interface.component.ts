@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 import { AssignmentService } from '../core/assignment.service';
 import { UserService } from '../core/user.service';
 import { ReportService } from '../core/report.service';
@@ -30,6 +31,7 @@ import { Observable } from 'rxjs';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTableModule,
+    MatIconModule,
   ],
   templateUrl: './assignment-interface.component.html',
   styleUrls: ['./assignment-interface.component.css'],

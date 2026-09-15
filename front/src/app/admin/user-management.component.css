@@ -1,17 +1,202 @@
 .users-card {
-  margin: 2rem;
+  margin: 0;
+  background: var(--bg-elevated) !important;
+  border: 1px solid var(--border-base) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.users-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 1.25rem !important;
 }
 
 .add-btn {
-  margin-bottom: 1rem;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  font-size: 0.85rem !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--accent) !important;
+}
+
+.add-btn .material-icons {
+  font-size: 1.1rem !important;
+}
+
+.controls-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.search-field-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 2.65rem !important;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-base);
+  color: var(--text-primary);
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-base);
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--ease-fast);
+}
+
+.chip-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.chip-btn--active {
+  background: var(--accent-dim) !important;
+  color: var(--accent) !important;
+  border-color: var(--accent) !important;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-sm);
+}
+
+.users-table {
+  width: 100%;
+  background: transparent !important;
+}
+
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent-dim);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.email-cell {
+  font-family: var(--font-mono);
+  font-size: 0.82rem !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Role Badges */
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.role-citizen {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+}
+
+.role-agent {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+.role-admin {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+}
+
+.role-superadmin {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+}
+
+.actions-header {
+  text-align: right !important;
+}
+
+.actions-cell {
+  text-align: right !important;
+}
+
+.action-btn {
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.edit-btn {
+  color: var(--text-muted) !important;
+}
+
+.edit-btn:hover {
+  color: var(--accent) !important;
+}
+
+.delete-btn {
+  color: var(--danger) !important;
 }
 
 .loading-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 3rem 1rem;
+  gap: 1rem;
+  color: var(--text-muted);
 }
 
-table {
-  width: 100%;
+.no-users {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
 }

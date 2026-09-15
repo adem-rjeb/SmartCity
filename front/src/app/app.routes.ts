@@ -2,9 +2,11 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { roleGuard } from './core/role.guard';
 import { LoginComponent } from './core/login.component';
+import { RegisterComponent } from './core/register.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login',    component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: 'citizen',
     canActivate: [authGuard, roleGuard],
@@ -32,3 +34,4 @@ export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
 ];
+

@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import * as L from 'leaflet';
 import { ReportService } from '../core/report.service';
 import { CategoryService } from '../core/category.service';
@@ -51,6 +52,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
     MatSelectModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   templateUrl: './report-creation-form.component.html',
   styleUrls: ['./report-creation-form.component.css'],
@@ -105,9 +107,9 @@ export class ReportCreationFormComponent implements OnInit, AfterViewInit, OnDes
         zoom: DEFAULT_ZOOM,
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
       }).addTo(this.map);
 
       this.marker = L.marker([lat, lng], { draggable: true, icon: DefaultIcon }).addTo(this.map);

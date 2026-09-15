@@ -1,68 +1,251 @@
-<mat-card class="detail-card" *ngIf="assignment; else loading">
-  <mat-card-header>
-    <mat-card-title>{{ assignment.report?.titre }}</mat-card-title>
-    <mat-card-subtitle>{{ assignment.report?.adresse }}</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="info-grid">
-      <div class="info-item">
-        <label>Status:</label>
-        <strong>{{ assignment.status }}</strong>
+<div class="task-detail-container" *ngIf="assignment; else loading">
+  <!-- Top Navigation & Title Bar -->
+  <div class="detail-header">
+    <button mat-stroked-button class="back-btn" (click)="goBack()">
+      <span class="material-icons">arrow_back</span>
+      Back to Tasks
+    </button>
+    <div class="header-right">
+      <span class="task-id-badge">TASK #{{ assignment.id }}</span>
+      <span [class]="getPriorityClass(assignment.report?.priority)">
+        {{ assignment.report?.priority || 'NORMAL' }} PRIORITY
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Content Card -->
+  <mat-card class="detail-card">
+    <div class="card-hero">
+      <h1 class="issue-title">{{ assignment.report?.titre }}</h1>
+      <p class="issue-location">
+        <span class="material-icons">place</span>
+        {{ assignment.report?.adresse || 'Location not specified' }}
+      </p>
+    </div>
+
+    <!-- Visual Stepper Pipeline -->
+    <div class="pipeline-stepper">
+      <div class="step" [class.step--completed]="getStepState('ASSIGNED') === 'completed'" [class.step--active]="getStepState('ASSIGNED') === 'active'">
+        <div class="step-icon">
+          <span class="material-icons">{{ getStepState('ASSIGNED') === 'completed' ? 'check' : 'assignment' }}</span>
+        </div>
+        <span class="step-label">Assigned</span>
       </div>
-      <div class="info-item">
-        <label>Priority:</label>
-        <strong>{{ assignment.report?.priority }}</strong>
+      <div class="step-line" [class.step-line--active]="getStepState('ACCEPTED') !== 'pending'"></div>
+
+      <div class="step" [class.step--completed]="getStepState('ACCEPTED') === 'completed'" [class.step--active]="getStepState('ACCEPTED') === 'active'">
+        <div class="step-icon">
+          <span class="material-icons">{{ getStepState('ACCEPTED') === 'completed' ? 'check' : 'check_circle' }}</span>
+        </div>
+        <span class="step-label">Accepted</span>
       </div>
-      <div class="info-item">
-        <label>Assigned At:</label>
-        <strong>{{ assignment.assignedAt | date: 'short' }}</strong>
+      <div class="step-line" [class.step-line--active]="getStepState('IN_PROGRESS') !== 'pending'"></div>
+
+      <div class="step" [class.step--completed]="getStepState('IN_PROGRESS') === 'completed'" [class.step--active]="getStepState('IN_PROGRESS') === 'active'">
+        <div class="step-icon">
+          <span class="material-icons">{{ getStepState('IN_PROGRESS') === 'completed' ? 'check' : 'engineering' }}</span>
+        </div>
+        <span class="step-label">In Progress</span>
+      </div>
+      <div class="step-line" [class.step-line--active]="getStepState('COMPLETED') === 'completed'"></div>
+
+      <div class="step" [class.step--completed]="getStepState('COMPLETED') === 'completed'" [class.step--active]="getStepState('COMPLETED') === 'active'">
+        <div class="step-icon">
+          <span class="material-icons">verified</span>
+        </div>
+        <span class="step-label">Completed</span>
       </div>
     </div>
 
-    <div class="description">
-      <label>Description:</label>
-      <p>{{ assignment.report?.description }}</p>
+    <!-- Quick Workflow Action Banner -->
+    <div class="action-banner" [ngSwitch]="assignment.status">
+      <div *ngSwitchCase="'ASSIGNED'" class="banner-content">
+        <div class="banner-text">
+          <h3>New Assignment Received</h3>
+          <p>Review the details below and confirm acceptance to start working on this task.</p>
+        </div>
+        <div class="banner-actions">
+          <button mat-flat-button color="primary" class="banner-btn btn-accept" (click)="changeStatus('ACCEPTED')" [disabled]="isSubmitting">
+            <span class="material-icons">check_circle</span>
+            Accept Task
+          </button>
+          <button mat-button class="banner-btn btn-decline" (click)="changeStatus('CANCELLED')" [disabled]="isSubmitting">
+            Decline
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'ACCEPTED'" class="banner-content">
+        <div class="banner-text">
+          <h3>Task Accepted</h3>
+          <p>Head to the location when ready and click "Start Work" to update the issue status.</p>
+        </div>
+        <div class="banner-actions">
+          <button mat-flat-button color="primary" class="banner-btn btn-progress" (click)="changeStatus('IN_PROGRESS')" [disabled]="isSubmitting">
+            <span class="material-icons">play_arrow</span>
+            Start Work
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'IN_PROGRESS'" class="banner-content">
+        <div class="banner-text">
+          <h3>Work In Progress</h3>
+          <p>Once the issue is resolved on-site, add your work log below and mark the task as complete.</p>
+        </div>
+        <div class="banner-actions">
+          <button mat-flat-button color="primary" class="banner-btn btn-complete" (click)="updateStatus()" [disabled]="isSubmitting">
+            <span class="material-icons">task_alt</span>
+            Mark Task Complete
+          </button>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'COMPLETED'" class="banner-content banner-completed">
+        <div class="banner-text">
+          <span class="material-icons text-success">check_circle</span>
+          <div>
+            <h3>Task Resolved</h3>
+            <p>Completed on {{ assignment.completedAt | date: 'medium' }}.</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'CANCELLED'" class="banner-content banner-cancelled">
+        <div class="banner-text">
+          <span class="material-icons text-danger">cancel</span>
+          <div>
+            <h3>Assignment Cancelled</h3>
+            <p>This task was declined or unassigned.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Status Update Form -->
-    <form [formGroup]="form" (ngSubmit)="updateStatus()" class="update-form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Update Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="ACCEPTED">Accept Task</mat-option>
-          <mat-option value="IN_PROGRESS">Start Work</mat-option>
-          <mat-option value="COMPLETED">Mark Complete</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <!-- Grid Content: Left Details & Right Form -->
+    <div class="detail-grid">
+      <!-- Left Column: Details & Map -->
+      <div class="grid-left">
+        <div class="section-card">
+          <h3 class="section-title">
+            <span class="material-icons">description</span>
+            Issue Description
+          </h3>
+          <p class="description-text">
+            {{ assignment.report?.description || 'No detailed description provided.' }}
+          </p>
+        </div>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Comments (optional)</mat-label>
-        <textarea matInput formControlName="commentaire" rows="3"></textarea>
-      </mat-form-field>
+        <div class="section-card">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="material-icons">map</span>
+              Target Location
+            </h3>
+            <a
+              *ngIf="getDirectionsUrl()"
+              [href]="getDirectionsUrl()"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="directions-link"
+            >
+              <span class="material-icons">directions</span>
+              Open in Maps
+            </a>
+          </div>
 
-      <div class="proof-upload">
-        <label>Proof Photo (for COMPLETED):</label>
-        <input type="file" accept="image/*" (change)="onProofPhotoSelected($event)" />
-        <p *ngIf="selectedProofFileName">Selected: {{ selectedProofFileName }}</p>
+          <div *ngIf="assignment.report?.latitude && assignment.report?.longitude" class="map-wrapper">
+            <div #mapContainer class="task-map" role="img" aria-label="Location map"></div>
+            <div class="coordinates-bar">
+              <span>Lat: {{ assignment.report?.latitude }}</span>
+              <span>Lng: {{ assignment.report?.longitude }}</span>
+            </div>
+          </div>
+          <div *ngIf="!assignment.report?.latitude || !assignment.report?.longitude" class="no-map">
+            <p>No map coordinates available for this location.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="button-group">
-        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isSubmitting">
-          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
-          {{ isSubmitting ? 'Updating...' : 'Update Status' }}
-        </button>
-        <button mat-stroked-button type="button" (click)="goBack()">Back</button>
+      <!-- Right Column: Work Log & Photo Upload Form -->
+      <div class="grid-right">
+        <div class="section-card">
+          <h3 class="section-title">
+            <span class="material-icons">edit_note</span>
+            Agent Work Log & Status
+          </h3>
+
+          <form [formGroup]="form" (ngSubmit)="updateStatus()" class="update-form">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Task Status</mat-label>
+              <mat-icon matPrefix>sync</mat-icon>
+              <mat-select formControlName="status">
+                <mat-option value="ASSIGNED">Assigned</mat-option>
+                <mat-option value="ACCEPTED">Accepted</mat-option>
+                <mat-option value="IN_PROGRESS">In Progress</mat-option>
+                <mat-option value="COMPLETED">Completed</mat-option>
+                <mat-option value="CANCELLED">Cancelled / Declined</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Work Notes & Comments</mat-label>
+              <mat-icon matPrefix>comment</mat-icon>
+              <textarea
+                matInput
+                formControlName="commentaire"
+                rows="4"
+                placeholder="Describe actions taken or resolution notes..."
+              ></textarea>
+            </mat-form-field>
+
+            <!-- Proof Photo Dropzone -->
+            <div class="proof-section">
+              <label class="proof-label">Proof of Work Photo (Optional):</label>
+              <div class="file-dropzone" (click)="fileInput.click()">
+                <input
+                  #fileInput
+                  type="file"
+                  accept="image/*"
+                  (change)="onProofPhotoSelected($event)"
+                  style="display:none"
+                />
+                <span class="material-icons drop-icon">cloud_upload</span>
+                <p class="drop-text" *ngIf="!selectedProofFileName">
+                  Click or drag photo here to attach proof
+                </p>
+                <p class="drop-text drop-selected" *ngIf="selectedProofFileName">
+                  {{ selectedProofFileName }}
+                </p>
+              </div>
+
+              <div *ngIf="proofPhotoPreviewUrl" class="proof-preview-wrapper">
+                <img [src]="proofPhotoPreviewUrl" alt="Proof preview" class="proof-preview" />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                mat-flat-button
+                color="primary"
+                type="submit"
+                class="save-btn"
+                [disabled]="form.invalid || isSubmitting"
+              >
+                <mat-spinner *ngIf="isSubmitting" diameter="18"></mat-spinner>
+                {{ isSubmitting ? 'Saving Changes...' : 'Save Work Log' }}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+    </div>
+  </mat-card>
+</div>
 
 <ng-template #loading>
-  <mat-card class="detail-card">
-    <mat-card-content>
-      <div class="loading-container">
-        <mat-spinner></mat-spinner>
-      </div>
-    </mat-card-content>
-  </mat-card>
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading task details...</p>
+  </div>
 </ng-template>

@@ -11,6 +11,7 @@ enum ReportStatus: string
     case ASSIGNED = 'ASSIGNED';
     case IN_PROGRESS = 'IN_PROGRESS';
     case RESOLVED = 'RESOLVED';
+    case ESCALATED = 'ESCALATED';
     case REJECTED = 'REJECTED';
     case CLOSED = 'CLOSED';
 }

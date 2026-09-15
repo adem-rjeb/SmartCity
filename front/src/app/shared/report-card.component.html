@@ -1,13 +1,22 @@
-<mat-card class="report-card">
+<mat-card class="report-card" (click)="openDetails()">
   <mat-card-header>
-    <mat-card-title>{{ report.titre }}</mat-card-title>
-    <mat-card-subtitle>{{ report.adresse }}</mat-card-subtitle>
+    <div class="card-header-main">
+      <mat-card-title>{{ report.titre }}</mat-card-title>
+      <mat-card-subtitle>
+        <span class="material-icons" style="font-size: 14px;">place</span>
+        {{ report.adresse }}
+      </mat-card-subtitle>
+    </div>
+    <span class="view-hint material-icons">visibility</span>
   </mat-card-header>
   <mat-card-content>
-    <p>{{ report.description }}</p>
+    <p class="description-preview">{{ report.description }}</p>
     <div class="meta">
       <app-status-badge [status]="report.status"></app-status-badge>
       <app-priority-badge [priority]="report.priority"></app-priority-badge>
+      <span class="meta-category" *ngIf="report.category">
+        {{ report.category.nom }}
+      </span>
     </div>
   </mat-card-content>
 </mat-card>

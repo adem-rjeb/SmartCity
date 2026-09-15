@@ -8,6 +8,7 @@
       <!-- Category Selection -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Category</mat-label>
+        <mat-icon matPrefix>category</mat-icon>
         <mat-select formControlName="categoryId">
           <mat-option *ngFor="let cat of (categories$ | async)" [value]="cat.id">
             {{ cat.nom }}
@@ -18,12 +19,14 @@
       <!-- Title -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Title</mat-label>
+        <mat-icon matPrefix>title</mat-icon>
         <input matInput formControlName="titre" placeholder="Brief title of the issue" />
       </mat-form-field>
 
       <!-- Description -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Description</mat-label>
+        <mat-icon matPrefix>description</mat-icon>
         <textarea
           matInput
           formControlName="description"
@@ -35,6 +38,7 @@
       <!-- Address -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Address</mat-label>
+        <mat-icon matPrefix>place</mat-icon>
         <input matInput formControlName="adresse" placeholder="Street address or location" />
       </mat-form-field>
 
@@ -42,14 +46,17 @@
       <div class="geo-grid">
         <mat-form-field appearance="outline">
           <mat-label>Latitude</mat-label>
+          <mat-icon matPrefix>my_location</mat-icon>
           <input matInput formControlName="latitude" type="number" readonly />
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Longitude</mat-label>
+          <mat-icon matPrefix>my_location</mat-icon>
           <input matInput formControlName="longitude" type="number" readonly />
         </mat-form-field>
-        <button mat-stroked-button type="button" (click)="detectGeolocation()">
-          📍 Detect Location
+        <button mat-stroked-button type="button" class="geo-btn" (click)="detectGeolocation()">
+          <span class="material-icons" style="font-size:16px;vertical-align:middle;margin-right:4px">my_location</span>
+          Detect location
         </button>
       </div>
 

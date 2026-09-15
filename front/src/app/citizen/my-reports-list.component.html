@@ -1,19 +1,124 @@
-<mat-card class="reports-card">
-  <mat-card-header>
-    <mat-card-title>My Reports</mat-card-title>
-    <mat-card-subtitle>Track the status of your submitted issues</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
+<div class="my-reports-container">
+  <!-- Metric Stat Cards -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon icon-total">
+        <span class="material-icons">assignment</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.total }}</span>
+        <span class="stat-label">Total Submitted</span>
+      </div>
     </div>
 
-    <div *ngIf="!isLoading && (reports$ | async) as reports" class="reports-list">
-      <div *ngIf="reports.length === 0" class="no-reports">
-        <p>No reports yet. <a routerLink="/citizen/create">Create your first report!</a></p>
+    <div class="stat-card">
+      <div class="stat-icon icon-progress">
+        <span class="material-icons">sync</span>
       </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.inProgress }}</span>
+        <span class="stat-label">In Progress</span>
+      </div>
+    </div>
 
+    <div class="stat-card">
+      <div class="stat-icon icon-resolved">
+        <span class="material-icons">check_circle</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.resolved }}</span>
+        <span class="stat-label">Resolved</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon icon-rate">
+        <span class="material-icons">trending_up</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats.rate }}%</span>
+        <span class="stat-label">Resolution Rate</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search & Filters -->
+  <div class="controls-bar">
+    <div class="search-field-wrapper">
+      <span class="input-icon material-icons">search</span>
+      <input
+        type="text"
+        class="form-input form-input--icon search-input"
+        placeholder="Search your reports by title, address, category..."
+        [ngModel]="searchQuery"
+        (ngModelChange)="onSearch($event)"
+      />
+    </div>
+
+    <div class="filter-chips">
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'ALL'"
+        (click)="setFilter('ALL')"
+      >
+        All Reports ({{ stats.total }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'PENDING'"
+        (click)="setFilter('PENDING')"
+      >
+        Pending ({{ stats.pending }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'IN_PROGRESS'"
+        (click)="setFilter('IN_PROGRESS')"
+      >
+        In Progress ({{ stats.inProgress }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'RESOLVED'"
+        (click)="setFilter('RESOLVED')"
+      >
+        Resolved ({{ stats.resolved }})
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="36"></mat-spinner>
+    <p>Loading your reports...</p>
+  </div>
+
+  <!-- Reports Grid -->
+  <div *ngIf="!isLoading && (filteredReports$ | async) as reports" class="reports-content">
+    <div *ngIf="reports.length === 0" class="no-reports">
+      <span class="material-icons empty-icon">assignment_late</span>
+      <h3>No reports found</h3>
+      <p *ngIf="searchQuery || activeFilter !== 'ALL'">
+        No reports match your current filter or search criteria.
+      </p>
+      <p *ngIf="!searchQuery && activeFilter === 'ALL'">
+        You have not submitted any reports yet.
+      </p>
+      <button mat-flat-button color="primary" class="create-btn" routerLink="/citizen/create">
+        <span class="material-icons">add</span>
+        Report New Issue
+      </button>
+    </div>
+
+    <div *ngIf="reports.length > 0" class="reports-grid">
       <app-report-card *ngFor="let report of reports" [report]="report"></app-report-card>
     </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+</div>

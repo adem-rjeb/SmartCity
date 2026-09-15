@@ -1,28 +1,45 @@
 .badge {
   display: inline-flex;
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
-.low {
-  background: #e8f5e9;
-  color: #2e7d32;
+.badge::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
+
+/* Priority variants */
+.low {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+}
+.low::before { background: #64748b; }
 
 .medium {
-  background: #fff8e1;
-  color: #f9a825;
+  background: var(--warning-dim);
+  color: #fbbf24;
 }
+.medium::before { background: #f59e0b; }
 
 .high {
-  background: #ffe0b2;
-  color: #ef6c00;
+  background: rgba(249, 115, 22, 0.12);
+  color: #fb923c;
 }
+.high::before { background: #f97316; }
 
 .urgent {
-  background: #fce4ec;
-  color: #c2185b;
+  background: var(--danger-dim);
+  color: var(--danger);
 }
+.urgent::before { background: var(--danger); }

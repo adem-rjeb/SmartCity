@@ -63,11 +63,13 @@
     <form *ngIf="!isLoading && selectedReport" [formGroup]="form" (ngSubmit)="createAssignment()">
       <mat-form-field appearance="outline" class="full-width" disabled>
         <mat-label>Report</mat-label>
+        <mat-icon matPrefix>assignment</mat-icon>
         <input matInput [value]="selectedReport?.titre" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Assign to Agent</mat-label>
+        <mat-icon matPrefix>person_add</mat-icon>
         <mat-select formControlName="agentId">
           <mat-option *ngFor="let agent of (agents$ | async)" [value]="agent.id">
             {{ agent.nom }} ({{ agent.email }})
@@ -77,6 +79,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Assignment Notes (optional)</mat-label>
+        <mat-icon matPrefix>notes</mat-icon>
         <textarea matInput formControlName="commentaire" rows="4"></textarea>
       </mat-form-field>
 

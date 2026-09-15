@@ -1,12 +1,16 @@
-<div class="supervisor-dashboard">
+<div class="supervisor-dashboard dashboard-shell">
+  <header class="page-header">
+    <h1>Supervisor Console</h1>
+    <p>Overview of city reports, pending queue, and agent assignments.</p>
+  </header>
+
   <mat-tab-group>
-    <!-- Dashboard Tab -->
-    <mat-tab label="Dashboard">
+    <mat-tab label="Overview">
       <div class="dashboard-grid">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Reports Overview</mat-card-title>
-            <mat-card-subtitle>Real-time statistics</mat-card-subtitle>
+            <mat-card-title>Report statistics</mat-card-title>
+            <mat-card-subtitle>Current status breakdown</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="stats-grid">
@@ -15,12 +19,12 @@
                 <div class="stat-value">{{ statusCount('PENDING') }}</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">In Progress</div>
+                <div class="stat-label">In progress</div>
                 <div class="stat-value">{{ statusCount('IN_PROGRESS') + statusCount('ASSIGNED') }}</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">Avg Resolution</div>
-                <div class="stat-value">{{ avgResolutionDays }} days</div>
+                <div class="stat-label">Avg. resolution</div>
+                <div class="stat-value">{{ avgResolutionDays }}d</div>
               </div>
             </div>
 
@@ -45,12 +49,10 @@
       </div>
     </mat-tab>
 
-    <!-- Pending Reports Tab -->
-    <mat-tab label="Pending Reports">
+    <mat-tab label="Pending">
       <app-pending-reports-queue></app-pending-reports-queue>
     </mat-tab>
 
-    <!-- Assignment Tab -->
     <mat-tab label="Assignments">
       <app-assignment-interface></app-assignment-interface>
     </mat-tab>

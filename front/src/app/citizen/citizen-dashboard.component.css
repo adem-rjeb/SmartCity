@@ -1,3 +1,1 @@
-.citizen-dashboard {
-  padding: 1rem;
-}
+.citizen-dashboard { animation: fadeIn var(--ease-smooth) both; }

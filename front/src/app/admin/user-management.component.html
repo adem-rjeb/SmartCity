@@ -1,45 +1,121 @@
 <mat-card class="users-card">
-  <mat-card-header>
-    <mat-card-title>User Management</mat-card-title>
-    <mat-card-subtitle>Create, edit, and delete users</mat-card-subtitle>
+  <mat-card-header class="users-header">
+    <div class="header-titles">
+      <mat-card-title>User Directory & Roles</mat-card-title>
+      <mat-card-subtitle>Manage platform citizens, field agents, and admin accounts</mat-card-subtitle>
+    </div>
+    <button mat-flat-button color="primary" class="add-btn" (click)="openUserForm()">
+      <span class="material-icons">person_add</span>
+      Add New User
+    </button>
   </mat-card-header>
-  <mat-card-content>
-    <button mat-flat-button color="primary" class="add-btn" (click)="openUserForm()">+ Add User</button>
 
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
+  <mat-card-content>
+    <!-- Controls bar -->
+    <div class="controls-bar">
+      <div class="search-field-wrapper">
+        <span class="input-icon material-icons">search</span>
+        <input
+          type="text"
+          class="form-input form-input--icon search-input"
+          placeholder="Search users by name, email, or role..."
+          [ngModel]="searchQuery"
+          (ngModelChange)="onSearch($event)"
+        />
+      </div>
+
+      <div class="filter-chips">
+        <button
+          type="button"
+          class="chip-btn"
+          [class.chip-btn--active]="activeFilter === 'ALL'"
+          (click)="setFilter('ALL')"
+        >
+          All Users ({{ counts.all }})
+        </button>
+
+        <button
+          type="button"
+          class="chip-btn"
+          [class.chip-btn--active]="activeFilter === 'ROLE_CITIZEN'"
+          (click)="setFilter('ROLE_CITIZEN')"
+        >
+          Citizens ({{ counts.citizens }})
+        </button>
+
+        <button
+          type="button"
+          class="chip-btn"
+          [class.chip-btn--active]="activeFilter === 'ROLE_AGENT'"
+          (click)="setFilter('ROLE_AGENT')"
+        >
+          Field Agents ({{ counts.agents }})
+        </button>
+
+        <button
+          type="button"
+          class="chip-btn"
+          [class.chip-btn--active]="activeFilter === 'ROLE_ADMIN'"
+          (click)="setFilter('ROLE_ADMIN')"
+        >
+          Administrators ({{ counts.admins }})
+        </button>
+      </div>
     </div>
 
-    <table mat-table [dataSource]="(users$ | async)!" *ngIf="!isLoading">
-      <ng-container matColumnDef="nom">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let user">{{ user.nom }}</td>
-      </ng-container>
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="36"></mat-spinner>
+      <p>Loading users directory...</p>
+    </div>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
-      </ng-container>
+    <!-- Users Table -->
+    <div *ngIf="!isLoading && (filteredUsers$ | async) as users" class="table-wrapper">
+      <div *ngIf="users.length === 0" class="no-users">
+        <span class="material-icons empty-icon">people_outline</span>
+        <p>No users matching your criteria.</p>
+      </div>
 
-      <ng-container matColumnDef="role">
-        <th mat-header-cell *matHeaderCellDef>Role</th>
-        <td mat-cell *matCellDef="let user">{{ user.role }}</td>
-      </ng-container>
+      <table mat-table [dataSource]="users" *ngIf="users.length > 0" class="users-table">
+        <ng-container matColumnDef="nom">
+          <th mat-header-cell *matHeaderCellDef>User Name</th>
+          <td mat-cell *matCellDef="let user">
+            <div class="user-cell">
+              <div class="avatar-circle">{{ user.nom?.substring(0, 1) || 'U' }}</div>
+              <span class="user-name">{{ user.nom }}</span>
+            </div>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let user">
-          <button mat-icon-button (click)="openUserForm(user)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="deleteUser(user)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email Address</th>
+          <td mat-cell *matCellDef="let user" class="email-cell">{{ user.email }}</td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>System Role</th>
+          <td mat-cell *matCellDef="let user">
+            <span [class]="getRoleBadgeClass(user.role)">
+              {{ formatRole(user.role) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+          <td mat-cell *matCellDef="let user" class="actions-cell">
+            <button mat-icon-button class="action-btn edit-btn" (click)="openUserForm(user)" title="Edit User">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button class="action-btn delete-btn" (click)="deleteUser(user)" title="Delete User">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
   </mat-card-content>
 </mat-card>

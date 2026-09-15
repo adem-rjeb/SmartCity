@@ -1,3 +1,13 @@
-.agent-dashboard {
-  padding: 2rem;
+.agent-dashboard { animation: fadeIn var(--ease-smooth) both; }
+
+.completed-card { margin: 0; }
+
+.no-tasks {
+  text-align: center;
+  padding: 2.5rem;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-base);
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  font-size: 0.875rem;
 }

@@ -1,42 +1,188 @@
-<mat-card class="tasks-card">
-  <mat-card-header>
-    <mat-card-title>Assigned Tasks</mat-card-title>
-    <mat-card-subtitle>Your pending assignments</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
-    <div *ngIf="isLoading" class="loading-container">
-      <mat-spinner></mat-spinner>
+<div class="tasks-container">
+  <!-- Search & Filter Controls -->
+  <div class="controls-bar">
+    <div class="search-field-wrapper">
+      <span class="input-icon material-icons">search</span>
+      <input
+        type="text"
+        class="form-input form-input--icon search-input"
+        placeholder="Search tasks by title, address, or category..."
+        [ngModel]="searchQuery"
+        (ngModelChange)="onSearch($event)"
+      />
     </div>
 
-    <div *ngIf="!isLoading && (assignments$ | async) as assignments">
-      <div *ngIf="assignments.length === 0" class="no-tasks">
-        <p>No tasks assigned yet.</p>
-      </div>
+    <div class="filter-chips">
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'ACTIVE'"
+        (click)="setFilter('ACTIVE')"
+      >
+        <span class="material-icons">bolt</span>
+        Active Tasks ({{ counts.active }})
+      </button>
 
-      <mat-list *ngIf="assignments.length > 0">
-        <mat-list-item
-          *ngFor="let assignment of assignments"
-          [matBadge]="assignment.status"
-          matBadgeColor="accent"
-        >
-          <div matListItemTitle>
-            {{ assignment.report?.titre }}
-          </div>
-          <div matListItemLine>
-            {{ assignment.report?.adresse }}
-          </div>
-          <div matListItemLine class="meta">
-            Priority: {{ assignment.report?.priority }} | Status: {{ assignment.status }}
-          </div>
-          <button
-            mat-stroked-button
-            matListItemMeta
-            [routerLink]="['/agent/task', assignment.id]"
-          >
-            View Details
-          </button>
-        </mat-list-item>
-      </mat-list>
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'ASSIGNED'"
+        (click)="setFilter('ASSIGNED')"
+      >
+        New ({{ counts.assigned }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'ACCEPTED'"
+        (click)="setFilter('ACCEPTED')"
+      >
+        Accepted ({{ counts.accepted }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'IN_PROGRESS'"
+        (click)="setFilter('IN_PROGRESS')"
+      >
+        In Progress ({{ counts.inProgress }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'COMPLETED'"
+        (click)="setFilter('COMPLETED')"
+      >
+        Completed ({{ counts.completed }})
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.chip-btn--active]="activeFilter === 'ALL'"
+        (click)="setFilter('ALL')"
+      >
+        All ({{ counts.all }})
+      </button>
     </div>
-  </mat-card-content>
-</mat-card>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="36"></mat-spinner>
+    <p>Loading your assigned tasks...</p>
+  </div>
+
+  <!-- Tasks Grid -->
+  <div *ngIf="!isLoading && (filteredAssignments$ | async) as assignments">
+    <div *ngIf="assignments.length === 0" class="no-tasks">
+      <span class="material-icons empty-icon">assignment_turned_in</span>
+      <h3>No tasks found</h3>
+      <p *ngIf="searchQuery || activeFilter !== 'ACTIVE'">
+        Try clearing your search query or filter to view other tasks.
+      </p>
+      <p *ngIf="!searchQuery && activeFilter === 'ACTIVE'">
+        You have no active pending tasks at the moment.
+      </p>
+    </div>
+
+    <div *ngIf="assignments.length > 0" class="tasks-grid">
+      <mat-card
+        *ngFor="let assignment of assignments"
+        class="task-card"
+        [routerLink]="['/agent/task', assignment.id]"
+      >
+        <div class="task-card-header">
+          <div class="task-badges">
+            <span [class]="getStatusClass(assignment.status)">
+              {{ assignment.status }}
+            </span>
+            <span [class]="getPriorityClass(assignment.report?.priority)">
+              {{ assignment.report?.priority || 'NORMAL' }}
+            </span>
+          </div>
+          <span class="task-id">#TASK-{{ assignment.id }}</span>
+        </div>
+
+        <div class="task-card-body">
+          <h3 class="task-title">{{ assignment.report?.titre || 'Untitled Issue' }}</h3>
+          <p class="task-address">
+            <span class="material-icons">place</span>
+            {{ assignment.report?.adresse || 'No address specified' }}
+          </p>
+
+          <div class="task-meta">
+            <span class="meta-item" *ngIf="assignment.report?.category">
+              <span class="material-icons">category</span>
+              {{ assignment.report?.category?.nom }}
+            </span>
+            <span class="meta-item">
+              <span class="material-icons">schedule</span>
+              Assigned {{ assignment.assignedAt | date: 'shortDate' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="task-card-footer" (click)="$event.stopPropagation()">
+          <!-- One-Click Quick Action Buttons based on status -->
+          <ng-container [ngSwitch]="assignment.status">
+            <div *ngSwitchCase="'ASSIGNED'" class="action-group">
+              <button
+                mat-flat-button
+                color="primary"
+                class="quick-btn btn-accept"
+                (click)="quickUpdateStatus(assignment, 'ACCEPTED', $event)"
+              >
+                <span class="material-icons">check_circle</span>
+                Accept Task
+              </button>
+              <button
+                mat-button
+                class="quick-btn btn-decline"
+                (click)="quickUpdateStatus(assignment, 'CANCELLED', $event)"
+              >
+                Decline
+              </button>
+            </div>
+
+            <div *ngSwitchCase="'ACCEPTED'" class="action-group">
+              <button
+                mat-flat-button
+                color="primary"
+                class="quick-btn btn-progress"
+                (click)="quickUpdateStatus(assignment, 'IN_PROGRESS', $event)"
+              >
+                <span class="material-icons">play_arrow</span>
+                Start Work
+              </button>
+            </div>
+
+            <div *ngSwitchCase="'IN_PROGRESS'" class="action-group">
+              <button
+                mat-flat-button
+                class="quick-btn btn-complete"
+                [routerLink]="['/agent/task', assignment.id]"
+              >
+                <span class="material-icons">task_alt</span>
+                Complete & Upload Proof
+              </button>
+            </div>
+
+            <div *ngSwitchDefault class="action-group">
+              <button
+                mat-stroked-button
+                class="quick-btn btn-view"
+                [routerLink]="['/agent/task', assignment.id]"
+              >
+                View Details
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

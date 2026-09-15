@@ -1,0 +1,195 @@
+<div class="auth-shell">
+  <div class="auth-hero">
+    <div class="hero-content register-hero">
+      <div class="brand-badge">
+        <span class="pulse-dot"></span>
+        Resident Account Setup
+      </div>
+
+      <h1 class="hero-title">
+        Create an account that
+        <span class="hero-highlight">actually helps people get things fixed.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Register once to report incidents, follow progress updates, and keep a clear record of every request you submit to the municipality.
+      </p>
+
+      <div class="journey-card">
+        <div class="journey-card-header">
+          <h3>How your report moves</h3>
+          <span class="journey-chip">Transparent workflow</span>
+        </div>
+
+        <ol class="journey-list">
+          <li>
+            <span class="journey-step">1</span>
+            <div>
+              <strong>Submit the incident</strong>
+              <p>Add the location, description, and photo evidence in a few steps.</p>
+            </div>
+          </li>
+          <li>
+            <span class="journey-step">2</span>
+            <div>
+              <strong>Municipal review</strong>
+              <p>Supervisors validate the case and route it to the right response team.</p>
+            </div>
+          </li>
+          <li>
+            <span class="journey-step">3</span>
+            <div>
+              <strong>Live follow-up</strong>
+              <p>You can check status changes without needing to call or re-open the case.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="hero-assurance">
+        <div>
+          <span class="assurance-label">Why register</span>
+          <p>Your reports stay attached to your account, which makes follow-up cleaner and more reliable.</p>
+        </div>
+        <div>
+          <span class="assurance-label">What you get</span>
+          <p>A personal dashboard for report history, progress updates, and response visibility.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-form-panel">
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="auth-kicker">New account</div>
+        <div class="auth-logo">
+          <svg viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="8" fill="#3b82f6"/>
+            <path d="M9 22V12h3v10H9zm5 0V12h3l3.5 5.8V12H23v10h-3l-3.5-5.8V22h-3z" fill="#fff"/>
+          </svg>
+        </div>
+        <h2 class="auth-title">Create Account</h2>
+        <p class="auth-subtitle">Set up your resident profile to start reporting and tracking requests.</p>
+      </div>
+
+      <div class="auth-trust-note">
+        <span class="material-icons">shield</span>
+        We only ask for the information needed to identify your account and secure access.
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg-nom">Full name</label>
+            <div class="input-wrapper">
+              <span class="input-icon material-icons">person_outline</span>
+              <input
+                id="reg-nom"
+                class="form-input form-input--icon"
+                [class.form-input--error]="nomInvalid"
+                formControlName="nom"
+                type="text"
+                autocomplete="name"
+                placeholder="Ahmed Ben Ali"
+              />
+            </div>
+            @if (nomInvalid) {
+              <span class="field-error">Please enter your full name (min. 2 characters)</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email address</label>
+            <div class="input-wrapper">
+              <span class="input-icon material-icons">mail_outline</span>
+              <input
+                id="reg-email"
+                class="form-input form-input--icon"
+                [class.form-input--error]="emailInvalid"
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+            </div>
+            @if (emailInvalid) {
+              <span class="field-error">Please enter a valid email address</span>
+            }
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon material-icons">lock_outline</span>
+              <input
+                id="reg-password"
+                class="form-input form-input--icon"
+                [class.form-input--error]="passwordInvalid"
+                formControlName="password"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Min. 6 characters"
+              />
+            </div>
+            @if (passwordInvalid) {
+              <span class="field-error">Password must be at least 6 characters</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm">Confirm password</label>
+            <div class="input-wrapper">
+              <span class="input-icon material-icons">lock_outline</span>
+              <input
+                id="reg-confirm"
+                class="form-input form-input--icon"
+                [class.form-input--error]="passwordsMismatch"
+                formControlName="confirmPassword"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Repeat your password"
+              />
+            </div>
+            @if (passwordsMismatch) {
+              <span class="field-error">Passwords do not match</span>
+            }
+          </div>
+        </div>
+
+        @if (errorMessage) {
+          <div class="form-error" role="alert">
+            <span class="material-icons" style="font-size:16px">error_outline</span>
+            {{ errorMessage }}
+          </div>
+        }
+
+        <button
+          id="register-submit"
+          class="auth-submit btn-primary"
+          type="submit"
+          [disabled]="isSubmitting"
+        >
+          @if (isSubmitting) {
+            <span class="spinner"></span> Creating account…
+          } @else {
+            Create Account
+          }
+        </button>
+      </form>
+
+      <p class="register-footnote">
+        By creating an account, you can keep all of your requests and status updates in one place.
+      </p>
+
+      <div class="auth-divider" role="presentation"></div>
+
+      <p class="auth-switch">
+        Already have an account?
+        <a routerLink="/login" class="auth-switch-link">Sign in</a>
+      </p>
+    </div>
+  </div>
+</div>

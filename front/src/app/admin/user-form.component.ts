@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../core/user.service';
 import { User, UserRole } from '../core/models';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -23,6 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSelectModule,
     MatButtonModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ data.user ? 'Edit User' : 'Add User' }}</h2>
@@ -30,16 +32,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
       <form [formGroup]="form" class="user-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
           <input matInput formControlName="nom" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
           <input matInput type="email" formControlName="email" required />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Role</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
           <mat-select formControlName="role" required>
             <mat-option *ngFor="let role of roles" [value]="role.value">
               {{ role.label }}
@@ -49,6 +54,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
           <input
             matInput
             type="password"

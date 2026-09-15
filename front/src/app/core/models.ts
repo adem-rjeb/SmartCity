@@ -37,6 +37,7 @@ export interface Report {
   longitude: number;
   status: ReportStatus;
   priority: ReportPriority;
+  photoPath?: string;
   createdAt?: string;
   updatedAt?: string;
   resolvedAt?: string;

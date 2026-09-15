@@ -22,7 +22,7 @@ use Symfony\Bundle\SecurityBundle\Security;
  *  - On PUT/PATCH: sync Report.status from Assignment.status
  *      ACCEPTED / IN_PROGRESS → IN_PROGRESS
  *      COMPLETED             → RESOLVED (+ resolvedAt)
- *      CANCELLED             → PENDING
+ *      CANCELLED             → PENDING (unlinks assignment)
  *
  * @implements ProcessorInterface<Assignment, Assignment>
  */
@@ -96,6 +96,10 @@ final class AssignmentStateProcessor implements ProcessorInterface
 
         if ($reportStatus === ReportStatus::RESOLVED && $report->getResolvedAt() === null) {
             $report->setResolvedAt(new \DateTimeImmutable());
+        }
+
+        if ($assignment->getStatus() === AssignmentStatus::CANCELLED) {
+            $report->setAssignment(null);
         }
 
         $this->em->persist($report);

@@ -1,9 +1,14 @@
-<div class="agent-dashboard">
+<div class="agent-dashboard dashboard-shell">
+  <header class="page-header">
+    <h1>Agent Workspace</h1>
+    <p>View assigned tasks and record completed work.</p>
+  </header>
+
   <mat-tab-group>
-    <mat-tab label="My Tasks">
+    <mat-tab label="Assigned Tasks">
       <app-assigned-tasks-list></app-assigned-tasks-list>
     </mat-tab>
-    <mat-tab label="Completed Work">
+    <mat-tab label="Completed">
       <mat-card class="completed-card">
         <mat-card-content>
           <div *ngIf="(completedAssignments$ | async) as completed; else loadingCompleted">
@@ -35,4 +40,3 @@
     </mat-tab>
   </mat-tab-group>
 </div>
-
