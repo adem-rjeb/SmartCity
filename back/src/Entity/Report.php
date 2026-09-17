@@ -14,6 +14,7 @@ use App\Enum\ReportStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(controller: \App\Controller\ReportCreateAction::class, security: "is_granted('ROLE_CITIZEN')"),
         new Put(security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_AGENT') and object.getAssignment() and object.getAssignment().getAssignedAgent() == user)")
     ],
+    normalizationContext: ['groups' => ['report:read']],
     security: "is_granted('ROLE_USER')"
 )]
 class Report
@@ -31,46 +33,59 @@ class Report
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
+    #[Groups(['report:read', 'assignment:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups(['report:read', 'assignment:read'])]
     private string $titre;
 
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
+    #[Groups(['report:read', 'assignment:read'])]
     private string $description;
 
     #[ORM\Column(type: 'string', length: 512)]
     #[Assert\NotBlank]
+    #[Groups(['report:read', 'assignment:read'])]
     private string $adresse;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['report:read', 'assignment:read'])]
     private float $latitude;
 
     #[ORM\Column(type: 'float')]
+    #[Groups(['report:read', 'assignment:read'])]
     private float $longitude;
 
     #[ORM\Column(enumType: ReportStatus::class)]
+    #[Groups(['report:read', 'assignment:read'])]
     private ReportStatus $status;
 
     #[ORM\Column(enumType: ReportPriority::class)]
+    #[Groups(['report:read', 'assignment:read'])]
     private ReportPriority $priority;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['report:read', 'assignment:read'])]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['report:read', 'assignment:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[Groups(['report:read', 'assignment:read'])]
     private ?\DateTimeImmutable $resolvedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'reports')]
+    #[Groups(['report:read', 'assignment:read'])]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
+    #[Groups(['report:read', 'assignment:read'])]
     private ?User $creator = null;
 
     #[ORM\OneToMany(mappedBy: 'report', targetEntity: Comment::class, cascade: ['persist','remove'])]

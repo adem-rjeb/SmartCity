@@ -2,11 +2,97 @@
   max-width: 720px;
   margin: 0 auto;
   animation: fadeIn var(--ease-smooth) both;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+}
+
+.form-card ::ng-deep .mat-mdc-card-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+  padding: 1.5rem;
+}
+
+.form-card ::ng-deep .mat-mdc-card-title {
+  color: #e0e7ff !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form-card ::ng-deep .mat-mdc-card-subtitle {
+  color: #a5b4fc !important;
+  font-size: 0.9rem;
+}
+
+.form-card ::ng-deep .mat-mdc-card-content {
+  padding: 1.5rem;
 }
 
 .full-width {
   width: 100%;
   margin-bottom: 0.75rem;
+}
+
+.full-width ::ng-deep .mat-mdc-text-field-wrapper {
+  background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4a 100%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.full-width ::ng-deep .mat-mdc-form-field-label {
+  color: #a5b4fc !important;
+}
+
+.full-width ::ng-deep .mat-mdc-form-field-label.mdc-floating-label {
+  color: #c7d2fe !important;
+}
+
+.full-width ::ng-deep .mat-mdc-form-field-required-marker {
+  color: #f87171 !important;
+}
+
+.full-width ::ng-deep .mat-mdc-text-field-wrapper input,
+.full-width ::ng-deep .mat-mdc-text-field-wrapper textarea {
+  color: #e0e7ff !important;
+}
+
+.full-width ::ng-deep .mat-mdc-text-field-wrapper textarea::placeholder {
+  color: #a5b4fc !important;
+}
+
+.full-width ::ng-deep .mat-mdc-text-field-wrapper input::placeholder,
+.full-width ::ng-deep .mat-mdc-text-field-wrapper textarea::placeholder {
+  color: #a5b4fc !important;
+}
+
+.full-width ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon {
+  color: #818cf8 !important;
+}
+
+.full-width ::ng-deep .mat-mdc-select-arrow {
+  color: #818cf8 !important;
+}
+
+.full-width ::ng-deep .mat-mdc-select-value {
+  color: #e0e7ff !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4a 100%);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+::ng-deep .mat-mdc-option {
+  color: #e0e7ff !important;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(102, 126, 234, 0.3);
 }
 
 .geo-grid {
@@ -16,50 +102,111 @@
   margin-bottom: 0.75rem;
   align-items: flex-end;
 }
-.geo-grid mat-form-field { width: 100%; }
+
+.geo-grid mat-form-field {
+  width: 100%;
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-text-field-wrapper {
+  background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4a 100%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-form-field-label {
+  color: #a5b4fc !important;
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-form-field-label.mdc-floating-label {
+  color: #c7d2fe !important;
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-form-field-required-marker {
+  color: #f87171 !important;
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-text-field-wrapper input {
+  color: #e0e7ff !important;
+}
+
+.geo-grid mat-form-field ::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-icon {
+  color: #818cf8 !important;
+}
+
 .geo-btn {
   margin-bottom: 0.75rem;
   white-space: nowrap;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  height: 56px;
 }
 
-.map-section { margin-bottom: 0.75rem; }
+.geo-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.geo-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.geo-btn .material-icons {
+  color: white;
+}
+
+.map-section {
+  margin-bottom: 0.75rem;
+}
+
 .map-hint {
   margin: 0 0 0.4rem;
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: #a5b4fc;
 }
+
 .map-container {
   height: 260px;
   width: 100%;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--border-base);
+  border: 1px solid rgba(102, 126, 234, 0.3);
   z-index: 0;
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
 }
 
 .photo-upload {
   margin-bottom: 0.75rem;
   padding: 0.85rem 1rem;
-  border: 1px dashed var(--border-subtle);
+  border: 1px dashed rgba(102, 126, 234, 0.4);
   border-radius: var(--radius-sm);
-  background: var(--bg-subtle);
+  background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4a 100%);
 }
+
 .photo-upload label {
   display: block;
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #c7d2fe;
   margin-bottom: 0.35rem;
 }
+
 .photo-upload input[type='file'] {
   font-size: 0.825rem;
-  color: var(--text-muted);
+  color: #a5b4fc;
   cursor: pointer;
 }
+
 .photo-upload p {
   margin-top: 0.35rem;
   font-size: 0.8rem;
-  color: var(--accent);
+  color: #818cf8;
 }
 
 .button-group {
@@ -70,12 +217,63 @@
   padding-top: 0.5rem;
 }
 
+.button-group ::ng-deep .mat-mdc-button {
+  border-radius: 0.75rem;
+  font-weight: 600;
+}
+
+.button-group ::ng-deep .mat-mdc-flat-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+}
+
+.button-group ::ng-deep .mat-mdc-flat-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.button-group ::ng-deep .mat-mdc-outlined-button {
+  border-color: rgba(102, 126, 234, 0.5);
+  color: #c7d2fe;
+  background: transparent;
+}
+
+.button-group ::ng-deep .mat-mdc-outlined-button:hover {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.7);
+}
+
+.clear-btn {
+  padding: 0.75rem 1.5rem;
+  height: 56px;
+}
+
+.submit-btn {
+  padding: 0.75rem 1.5rem;
+  height: 56px;
+}
+
 mat-spinner {
   display: inline-block;
   margin-right: 0.4rem;
 }
 
+mat-spinner ::ng-deep circle {
+  stroke: white;
+}
+
 @media (max-width: 768px) {
-  .geo-grid { grid-template-columns: 1fr; }
-  .button-group > * { flex: 1 1 auto; }
+  .geo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-group > * {
+    flex: 1 1 auto;
+  }
+
+  .geo-btn {
+    width: 100%;
+  }
 }

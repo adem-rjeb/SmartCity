@@ -18,6 +18,7 @@ export interface User {
   email: string;
   role: UserRole;
   municipality?: Municipality;
+  plainPassword?: string;
 }
 
 export interface Category {

@@ -3,10 +3,16 @@ import { authGuard } from './core/auth.guard';
 import { roleGuard } from './core/role.guard';
 import { LoginComponent } from './core/login.component';
 import { RegisterComponent } from './core/register.component';
+import { MyProfileComponent } from './shared/my-profile.component';
 
 export const routes: Routes = [
   { path: 'login',    component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  {
+    path: 'my-profile',
+    canActivate: [authGuard],
+    component: MyProfileComponent,
+  },
   {
     path: 'citizen',
     canActivate: [authGuard, roleGuard],

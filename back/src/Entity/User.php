@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
-        new Get(security: "is_granted('ROLE_ADMIN')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object == user"),
         new Post(
             security: "is_granted('ROLE_ADMIN')",
             processor: UserStateProcessor::class,
@@ -41,6 +41,13 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(
             security: "is_granted('ROLE_ADMIN')",
             processor: UserStateProcessor::class,
+        ),
+        new Patch(
+            name: 'patch_own_profile',
+            uriTemplate: '/users/{id}/profile',
+            security: "is_granted('ROLE_ADMIN') or object == user",
+            processor: UserStateProcessor::class,
+            denormalizationContext: ['groups' => ['user:write:self']],
         ),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
@@ -59,13 +66,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 180)]
-    #[Groups(['user:read', 'user:write', 'municipality:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:self', 'municipality:read'])]
     private string $nom = '';
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user:read', 'user:write', 'municipality:read'])]
+    #[Groups(['user:read', 'user:write', 'user:write:self', 'municipality:read'])]
     private string $email = '';
 
     /** Hashed password — never exposed in API responses */
@@ -79,8 +86,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * Hashed by UserStateProcessor before persist.
      */
     #[Assert\NotBlank(groups: ['user:create'], message: 'Password is required when creating a user.')]
-    #[Assert\Length(min: 8, groups: ['user:create', 'user:write'])]
-    #[Groups(['user:write'])]
+    #[Assert\Length(min: 8, groups: ['user:create', 'user:write', 'user:write:self'])]
+    #[Groups(['user:write', 'user:write:self'])]
     private ?string $plainPassword = null;
 
     /**
